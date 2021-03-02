@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.suncaper.projectprovider.mapper.ProjectMapper">
+  <resultMap id="DetailResultMap" type="net.suncaper.projectprovider.domain.Project" extends="BaseResultMap">
+    <collection property="jointCompanies" ofType="net.suncaper.projectprovider.domain.JointCompany" javaType="java.util.List">
+      <id column="pjc_id" jdbcType="INTEGER" property="id"/>
+      <result column="pjc_company_name" jdbcType="VARCHAR" property="companyName"/>
+    </collection>
+    <collection property="jointCompanyIds" ofType="java.lang.Integer" javaType="java.util.List">
+      <id column="pjc_id"/>
+    </collection>
+      <collection property="importanceIds" ofType="java.lang.Integer" javaType="java.util.List">
+          <id column="ppi_dic_id"/>
+      </collection>
+  </resultMap>
+  <select id="selectProjectDetailById" resultMap="DetailResultMap">
+    SELECT p.*, ppjc.joint_company_id AS pjc_id FROM pt_project p
+    LEFT JOIN pt_project_joint_company ppjc on p.id = ppjc.project_id
+    WHERE p.id = #{id};
+  </select>
+  <select id="selectProjectDetailsInIds" resultMap="DetailResultMap">
+      SELECT p.*, pjc.id AS pjc_id, pjc.company_name AS pjc_company_name,
+      ppi_dic.id       AS ppi_dic_id,
+      ppi_dic.value    AS ppi_dic_value
+      FROM pt_project p
+             LEFT JOIN pt_project_joint_company ppjc On ppjc.project_id = p.id
+             LEFT JOIN pt_joint_company pjc ON pjc.id = ppjc.joint_company_id
+              LEFT JOIN pt_project_importance ppi ON ppi.project_id = p.id
+              LEFT JOIN pt_sys_dic ppi_dic ON ppi_dic.id = ppi.importance_id
+      WHERE p.id IN
+      <foreach item="item" index="index" collection="list"
+               open="(" separator="," close=")">
+          #{item}
+      </foreach>
+  </select>
+</mapper>

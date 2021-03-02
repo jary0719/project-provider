@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+
+    <context id="mysqlTables" targetRuntime="MyBatis3">
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/projecttracking?useUnicode=true&amp;characterEncoding=utf8"
+                        userId="root"
+                        password="root">
+        </jdbcConnection>
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!--实体类-->
+        <javaModelGenerator targetPackage="net.suncaper.projectprovider.domain" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!-- 映射文件 -->
+        <sqlMapGenerator targetPackage="mybatis.mapper" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <!--Dao 接口-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="net.suncaper.projectprovider.mapper"
+                             targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+
+        <table tableName="pt_project" domainObjectName="Project">
+            <property name="rootClass" value="net.suncaper.projectprovider.domain.ProjectExt"/>
+            <property name="rootInterface" value="net.suncaper.projectprovider.mapper.ProjectMapperExt"/>
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="pt_project_dept" domainObjectName="ProjectDept"></table>
+        <table tableName="pt_joint_company" domainObjectName="JointCompany"></table>
+        <table tableName="pt_project_joint_company" domainObjectName="ProjectJointCompany"></table>
+        <table tableName="pt_sys_dic" domainObjectName="SysDict"></table>
+        <table tableName="pt_joint_dept" domainObjectName="JointDept"></table>
+        <table tableName="project_leader" domainObjectName="ProjectLeader"></table>
+        <table tableName="pt_project_importance" domainObjectName="ProjectImportance"></table>
+        <table tableName="pt_project_joint_dept" domainObjectName="ProjectJointDept"></table>
+
+    </context>
+
+
+</generatorConfiguration>
